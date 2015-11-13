@@ -1,5 +1,6 @@
 package com.mainapp.model;
 
+import java.text.NumberFormat;
 import java.util.Date;
 
 public class Schedule {
@@ -44,6 +45,11 @@ public class Schedule {
 		return price;
 	}
 
+	public String getPriceVerbose() {
+		NumberFormat moneyFormat = NumberFormat.getCurrencyInstance();
+		return " " + moneyFormat.format(this.price);
+	}
+	
 	public void setPrice(double price) {
 		this.price = price;
 	}

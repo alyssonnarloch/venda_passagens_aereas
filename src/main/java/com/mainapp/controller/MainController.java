@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.ws.rs.client.Client;
@@ -51,7 +52,8 @@ public class MainController {
 	}
 	
 	@RequestMapping("/main")
-	public String main(Model model) {		
+	public String main(Model model) {	
+        Locale BRAZIL = new Locale("pt","BR"); 
 		Client c = ClientBuilder.newClient();
 		
 		List<Schedule> schedules = c.target("http://localhost:3000/servico_empresa_aerea/webresources/schedule/start/1/end/1").request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
@@ -64,7 +66,9 @@ public class MainController {
 		
 		List<String> scheduleDates = new ArrayList<String>();
 		
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");		
+		//DateFormat df = new SimpleDateFormat("dd/MM/yyyy");		
+		DateFormat df = new SimpleDateFormat();		
+		df = DateFormat.getDateInstance(DateFormat.FULL, BRAZIL);  
 		
 		for(Schedule s : schedules) {		
 			String startDate = df.format(s.getStartAt());
@@ -89,6 +93,7 @@ public class MainController {
 				agrupedSchedules.put(dateText, schedulesByDate);
 			}			
 		}			
+		
 		
 		model.addAttribute("agrupedSchedules", agrupedSchedules);
 		
