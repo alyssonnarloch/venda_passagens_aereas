@@ -17,6 +17,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.catalina.connector.Request;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mainapp.model.City;
 import com.mainapp.model.Schedule;
@@ -51,12 +54,21 @@ public class MainController {
 		session.close();
 	}
 	
-	@RequestMapping("/main")
-	public String main(Model model) {	
+	@RequestMapping(value = "/main", method = RequestMethod.GET)
+	public String main(
+			@RequestParam(value = "start_destination_id", required = true) String startDestinationId,
+			@RequestParam(value = "end_destination_id", required = true) String endDestinationId,
+			Model model) {	
         Locale BRAZIL = new Locale("pt","BR"); 
 		Client c = ClientBuilder.newClient();
 		
-		List<Schedule> schedules = c.target("http://localhost:3000/servico_empresa_aerea/webresources/schedule/start/1/end/1").request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
+		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/";
+		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId; 
+		List<Schedule> schedules = c.target(urlSchedule + paramsUrl).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
+		
+		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/";
+		City startDestination = c.target(urlCity + startDestinationId).request(MediaType.APPLICATION_JSON).get(City.class);
+		City endDestination = c.target(urlCity + endDestinationId).request(MediaType.APPLICATION_JSON).get(City.class);
 		
         //Response r = c.target("http://localhost:3000/flightservice/webresources/destination/1").request(MediaType.APPLICATION_JSON).get();
         //URI selfUri = r.getLink("self").getUri();
@@ -96,6 +108,8 @@ public class MainController {
 		
 		
 		model.addAttribute("agrupedSchedules", agrupedSchedules);
+		model.addAttribute("startDestination", startDestination);
+		model.addAttribute("endDestination", endDestination);
 		
 		return "teste.index";
 	}

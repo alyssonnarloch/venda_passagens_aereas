@@ -8,28 +8,30 @@
         <h1 class="page-header">Horários</h1>
         
         <c:forEach items="${agrupedSchedules}" var="scheduleByDate">
-        	<h4>${scheduleByDate.key}</h4>
-        	
-       		<table class="table table-striped">
-	        	<thead>
-	        		<tr>
-	        			<th>Saída</th>
-	        			<th>Chegada</th>
-	        			<th>Preço</th>
-	        			<th>Ação</th>
-	        		</tr>
-	        	</thead>
-	        	<c:forEach items="${scheduleByDate.value}" var="schedule">		        
-		        	<tbody>
+			<div class="panel panel-green">     
+				<div class="panel-heading">${scheduleByDate.key}</div>   	
+	       		<table class="table table-striped">
+		        	<thead>
 		        		<tr>
-		        			<td><fmt:formatDate pattern="H:m" value="${schedule.startAt}" /></td>
-		        			<td><fmt:formatDate pattern="H:m" value="${schedule.endAt}" /></td>
-		        			<td>${schedule.priceVerbose}</td>
-		        			<td>+</td>
+		        			<th><span class="label label-primary">${startDestination.cityName} - ${startDestination.airportName} <span class="fa fa-plane"></span></span></th>
+		        			<th><span class="label label-success">${endDestination.cityName} - ${endDestination.airportName} <span class="glyphicon glyphicon-plane"></span></span></th>
+		        			<th><span class="label label-default">Preço <span class="fa fa-money"></span></span></th>
+		        			<th><span class="fa fa-gear"></span></th>
 		        		</tr>
-		        	</tbody>
-	        	</c:forEach>
-	        </table>
+		        	</thead>
+		        	<c:forEach items="${scheduleByDate.value}" var="schedule">		        
+			        	<tbody>
+			        		<tr>
+			        			<td><fmt:formatDate pattern="H:m" value="${schedule.startAt}" /></td>
+			        			<td><fmt:formatDate pattern="H:m" value="${schedule.endAt}" /></td>
+			        			<td>${schedule.priceVerbose}</td>
+			        			<td><a href="#" class="btn btn-success btn-sm" type="button" style="color: white;">Comprar <span class="glyphicon glyphicon-shopping-cart"></span></a></td>
+			        		</tr>
+			        	</tbody>
+		        	</c:forEach>
+		        </table>
+	        </div>
+	        
         </c:forEach>
     </div>    
 </div>
