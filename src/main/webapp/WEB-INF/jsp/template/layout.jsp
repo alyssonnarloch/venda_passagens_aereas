@@ -18,6 +18,9 @@
     <!-- Bootstrap Core CSS -->
     <link href="/public/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Datepicker -->
+    <link href="/public/datepicker/css/datepicker.css" rel="stylesheet">
+
     <!-- MetisMenu CSS -->
     <link href="/public/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
@@ -80,17 +83,25 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
+                        
                         <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                            </div>
+                        	<form name="pass_search" method="get" action="/teste">
+	                            <div class="form-group">
+	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" placeholder="Ida">
+                                </div>	                                
+	                            <div class="form-group">
+	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" placeholder="Volta">
+                                </div>                                
+                	            <div class="form-group">
+	                                <input type="text" class="form-control" name="travel_date" id="travel_date" placeholder="">
+                                </div>
+                                <div>
+                                	<input class="btn btn-primary" type="submit" value="Buscar">
+                                </div>
+                            </form>
                             <!-- /input-group -->
                         </li>
+                        
                         <li>
                             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>                        
@@ -107,22 +118,33 @@
         <!-- /#page-wrapper -->
 
     </div>
+    
     <!-- /#wrapper -->
 
     <!-- jQuery -->
     <script src="/public/bower_components/jquery/dist/jquery.min.js"></script>
+    
+    <!-- Datepicker -->
+    <script src="/public/datepicker/js/bootstrap-datepicker.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="/public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="/public/bower_components/metisMenu/dist/metisMenu.min.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="/public/bower_components/raphael/raphael-min.js"></script>
-    <script src="/public/bower_components/morrisjs/morris.min.js"></script>
-    <script src="/public/js/morris-data.js"></script>
+    <script src="/public/bower_components/metisMenu/dist/metisMenu.min.js"></script>    
 
     <!-- Custom Theme JavaScript -->
     <script src="/public/dist/js/sb-admin-2.js"></script>
 </body>
+
+<script type="text/javascript">
+	$(function() {
+		$("#travel_date").datepicker({
+			format: 'dd/mm/yyyy'
+		});
+		
+		$.get("/loadcities", {city_name : 'São P'}, function(data) {
+			console.log(data);
+		}, "json");
+	});
+</script>

@@ -27,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mainapp.model.City;
 import com.mainapp.model.Schedule;
@@ -114,4 +115,10 @@ public class MainController {
 		return "teste.index";
 	}
 
+	@RequestMapping(value = "/loadcities", method = RequestMethod.GET)
+	@ResponseBody
+	public String loadCities(@RequestParam("city_name") String cityName) {				
+		
+		return "{teste : oi}";
+	}
 }
