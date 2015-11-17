@@ -142,8 +142,19 @@
     <script src="/public/dist/js/sb-admin-2.js"></script>
 </body>
 
+<style>
+label.error {
+	color: red;
+	font-weight: bold;
+	font-size: 12px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+</style>
+
 <script type="text/javascript">
 	$(function() {
+		$("label.error").prev('input').addClass("error");
+		
 		$("#start_date").datepicker({
 			format: 'dd/mm/yyyy'
 		});
@@ -174,15 +185,27 @@
 			rules: {
 				start_destination_name: {
 					required: true,
-					number: true
+					//number: true
 				},
 				end_destination_name: {
 					required: true,
-					number: true
+					//number: true
 				},
 				start_date: {
 					required: true,
 					date: true
+				}
+			},
+			messages: {
+				start_destination_name: {
+					required: "Informe o local de partida."
+				},
+				end_destination_name: {
+					required: "Informe o seu destino."
+				},
+				start_date: {
+					required: "Informe a data de partida.",
+					date: "Data inválida."
 				}
 			}
 		});
