@@ -34,7 +34,7 @@ import com.mainapp.model.City;
 import com.mainapp.model.Schedule;
 
 @Controller
-public class MainController {
+public class ScheduleController {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -56,11 +56,12 @@ public class MainController {
 		session.close();
 	}
 	
-	@RequestMapping(value = "/main", method = RequestMethod.GET)
+	@RequestMapping(value = "/schedules", method = RequestMethod.GET)
 	public String main(
 			@RequestParam(value = "start_destination_id", required = true) String startDestinationId,
 			@RequestParam(value = "end_destination_id", required = true) String endDestinationId,
 			Model model) {	
+		
         Locale BRAZIL = new Locale("pt","BR"); 
 		Client c = ClientBuilder.newClient();
 		
@@ -108,7 +109,6 @@ public class MainController {
 			}			
 		}			
 		
-		
 		model.addAttribute("agrupedSchedules", agrupedSchedules);
 		model.addAttribute("startDestination", startDestination);
 		model.addAttribute("endDestination", endDestination);
@@ -120,13 +120,12 @@ public class MainController {
 	@ResponseBody
 	public List<Autocomplete> loadCities(@RequestParam("term") String term) {				
 		
-		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/search/" + term;
+		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/search/" + term.trim();
 		
 		Client c = ClientBuilder.newClient();
 		
 		List<City> cities = c.target(urlCity).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});
 		List<Autocomplete> acCities = new ArrayList<Autocomplete>();
-		
 		
 		for(City city: cities) {
 			Autocomplete ac = new Autocomplete();

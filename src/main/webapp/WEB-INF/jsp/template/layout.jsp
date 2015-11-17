@@ -88,7 +88,7 @@
                     <ul class="nav" id="side-menu">
                         
                         <li class="sidebar-search">
-                        	<form name="pass_search" method="get" action="/teste">
+                        	<form name="pass_search" method="get" action="/schedules">
 	                            <div class="form-group">
 	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" placeholder="Ida">
 	                                <input type="hidden" name="start_destination_id" id="start_destination_id">
@@ -151,7 +151,7 @@
 			format: 'dd/mm/yyyy'
 		});
 		
-		$("#start_destination_name, #end_destination_name").autocomplete({
+		$("#start_destination_name").autocomplete({
 			source: "/loadcities",
 			minLength: 2,
 	        open: function(event, ui) {
@@ -159,6 +159,17 @@
 	        },
 	        select: function(event, ui) {
 	        	$("#start_destination_id").val(ui.item.id);
+	        }
+		});		
+		
+		$("#end_destination_name").autocomplete({
+			source: "/loadcities",
+			minLength: 2,
+	        open: function(event, ui) {
+	        	$(".ui-autocomplete").css("z-index", 1000);
+	        },
+	        select: function(event, ui) {
+	        	$("#end_destination_id").val(ui.item.id);
 	        }
 		});		
 	});
