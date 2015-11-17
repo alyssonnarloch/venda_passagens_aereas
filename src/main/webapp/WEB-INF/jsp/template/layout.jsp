@@ -21,6 +21,9 @@
     <!-- Datepicker -->
     <link href="/public/datepicker/css/datepicker.css" rel="stylesheet">
 
+    <!-- Jquery-UI -->
+    <link href="/public/jquery-ui/jquery-ui.min.css" rel="stylesheet">    
+
     <!-- MetisMenu CSS -->
     <link href="/public/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
@@ -88,9 +91,11 @@
                         	<form name="pass_search" method="get" action="/teste">
 	                            <div class="form-group">
 	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" placeholder="Ida">
+	                                <input type="hidden" name="start_destination_id" id="start_destination_id">
                                 </div>	                                
 	                            <div class="form-group">
 	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" placeholder="Volta">
+	                                <input type="hidden" name="end_destination_id" id="end_destination_id">
                                 </div>                                
                 	            <div class="form-group">
 	                                <input type="text" class="form-control" name="travel_date" id="travel_date" placeholder="">
@@ -126,6 +131,9 @@
     
     <!-- Datepicker -->
     <script src="/public/datepicker/js/bootstrap-datepicker.js"></script>
+    
+    <!-- Jquery UI -->
+    <script src="/public/jquery-ui/jquery-ui.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="/public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -143,8 +151,15 @@
 			format: 'dd/mm/yyyy'
 		});
 		
-		$.get("/loadcities", {city_name : 'São P'}, function(data) {
-			console.log(data);
-		}, "json");
+		$("#start_destination_name, #end_destination_name").autocomplete({
+			source: "/loadcities",
+			minLength: 2,
+	        open: function(event, ui) {
+	        	$(".ui-autocomplete").css("z-index", 1000);
+	        },
+	        select: function(event, ui) {
+	        	$("#start_destination_id").val(ui.item.id);
+	        }
+		});		
 	});
 </script>

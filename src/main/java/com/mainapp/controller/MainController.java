@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mainapp.model.Autocomplete;
 import com.mainapp.model.City;
 import com.mainapp.model.Schedule;
 
@@ -117,8 +118,26 @@ public class MainController {
 
 	@RequestMapping(value = "/loadcities", method = RequestMethod.GET)
 	@ResponseBody
-	public String loadCities(@RequestParam("city_name") String cityName) {				
+	public List<Autocomplete> loadCities(@RequestParam("term") String term) {				
 		
-		return "{teste : oi}";
+		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/search/" + term;
+		
+		Client c = ClientBuilder.newClient();
+		
+		List<City> cities = c.target(urlCity).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});
+		List<Autocomplete> acCities = new ArrayList<Autocomplete>();
+		
+		
+		for(City city: cities) {
+			Autocomplete ac = new Autocomplete();
+			
+			ac.setId(city.getId());
+			ac.setValue(city.getCityName() + " (" + city.getAirportName() + ")");
+			ac.setLabel(city.getCityName() + " (" + city.getAirportName() + ")");
+			
+			acCities.add(ac);
+		}
+		
+		return acCities;
 	}
 }
