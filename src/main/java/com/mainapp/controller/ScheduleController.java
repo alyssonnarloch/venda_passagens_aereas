@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mainapp.model.Autocomplete;
 import com.mainapp.model.City;
 import com.mainapp.model.Schedule;
+import com.mainapp.util.Extras;
 
 @Controller
 public class ScheduleController {
@@ -58,15 +59,16 @@ public class ScheduleController {
 	
 	@RequestMapping(value = "/schedules", method = RequestMethod.GET)
 	public String main(
-			@RequestParam(value = "start_destination_id", required = true) String startDestinationId,
-			@RequestParam(value = "end_destination_id", required = true) String endDestinationId,
+			@RequestParam(value = "start_destination_id", required = true) int startDestinationId,
+			@RequestParam(value = "end_destination_id", required = true) int endDestinationId,
+			@RequestParam(value = "start_date", required = true) String startDateParam, 
 			Model model) {	
 		
         Locale BRAZIL = new Locale("pt","BR"); 
 		Client c = ClientBuilder.newClient();
 		
 		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/";
-		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId; 
+		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId + "/date/" + Extras.brDateToUs(startDateParam); 
 		List<Schedule> schedules = c.target(urlSchedule + paramsUrl).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
 		
 		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/";

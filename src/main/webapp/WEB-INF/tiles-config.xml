@@ -17,4 +17,9 @@
 		<put-attribute name="body"
 			value="/WEB-INF/jsp/teste/index.jsp" />
 	</definition>	
+
+	<definition name="home.index" extends="template">
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/home/index.jsp" />
+	</definition>	
 </tiles-definitions>

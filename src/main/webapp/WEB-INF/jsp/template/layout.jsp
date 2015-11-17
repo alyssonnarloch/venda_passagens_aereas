@@ -39,13 +39,6 @@
     <!-- Custom Fonts -->
     <link href="/public/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 </head>
 <body>	
     <div id="wrapper">
@@ -88,17 +81,17 @@
                     <ul class="nav" id="side-menu">
                         
                         <li class="sidebar-search">
-                        	<form name="pass_search" method="get" action="/schedules">
+                        	<form id="form_search" name="pass_search" method="get" action="/schedules">
 	                            <div class="form-group">
 	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" placeholder="Ida">
-	                                <input type="hidden" name="start_destination_id" id="start_destination_id">
+	                                <input type="hidden" name="start_destination_id" id="start_destination_id" value="">
                                 </div>	                                
 	                            <div class="form-group">
 	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" placeholder="Volta">
-	                                <input type="hidden" name="end_destination_id" id="end_destination_id">
+	                                <input type="hidden" name="end_destination_id" id="end_destination_id" value="">
                                 </div>                                
                 	            <div class="form-group">
-	                                <input type="text" class="form-control" name="travel_date" id="travel_date" placeholder="">
+	                                <input type="text" class="form-control" name="start_date" id="start_date" placeholder="Data de Partida">
                                 </div>
                                 <div>
                                 	<input class="btn btn-primary" type="submit" value="Buscar">
@@ -134,6 +127,10 @@
     
     <!-- Jquery UI -->
     <script src="/public/jquery-ui/jquery-ui.min.js"></script>
+    
+    <!-- Jquery Validation -->
+    <script src="/public/jquery-validation/dist/jquery.validate.min.js"></script>    
+    <script src="/public/jquery-validation/dist/additional-methods.min.js"></script>    
 
     <!-- Bootstrap Core JavaScript -->
     <script src="/public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -147,7 +144,7 @@
 
 <script type="text/javascript">
 	$(function() {
-		$("#travel_date").datepicker({
+		$("#start_date").datepicker({
 			format: 'dd/mm/yyyy'
 		});
 		
@@ -172,5 +169,22 @@
 	        	$("#end_destination_id").val(ui.item.id);
 	        }
 		});		
+		
+		$("#form_search").validate({
+			rules: {
+				start_destination_name: {
+					required: true,
+					number: true
+				},
+				end_destination_name: {
+					required: true,
+					number: true
+				},
+				start_date: {
+					required: true,
+					date: true
+				}
+			}
+		});
 	});
 </script>
