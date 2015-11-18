@@ -22,4 +22,9 @@
 		<put-attribute name="body"
 			value="/WEB-INF/jsp/home/index.jsp" />
 	</definition>	
+	
+	<definition name="error.page" extends="template">
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/exception/error_page.jsp" />
+	</definition>	
 </tiles-definitions>

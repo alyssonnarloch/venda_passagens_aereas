@@ -182,14 +182,16 @@ label.error {
 		});		
 		
 		$("#form_search").validate({
+			ignore: [],
+			onkeyup: false,
 			rules: {
-				start_destination_name: {
+				start_destination_id: {
 					required: true,
-					//number: true
+					number: true
 				},
-				end_destination_name: {
+				end_destination_id: {
 					required: true,
-					//number: true
+					number: true
 				},
 				start_date: {
 					required: true,
@@ -197,10 +199,10 @@ label.error {
 				}
 			},
 			messages: {
-				start_destination_name: {
+				start_destination_id: {
 					required: "Informe o local de partida."
 				},
-				end_destination_name: {
+				end_destination_id: {
 					required: "Informe o seu destino."
 				},
 				start_date: {
