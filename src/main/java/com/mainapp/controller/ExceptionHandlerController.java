@@ -14,6 +14,7 @@ public class ExceptionHandlerController {
 		ModelAndView model = new ModelAndView("error.page");
 		
 		model.addObject("errorMessage", "Requisição: " + req.getRequestURL() + "<br />Causa: " + e.getMessage());
+		e.printStackTrace();
 		
 		return model;
 	}

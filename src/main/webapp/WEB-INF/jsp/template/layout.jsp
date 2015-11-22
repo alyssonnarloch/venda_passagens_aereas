@@ -83,15 +83,15 @@
                         <li class="sidebar-search">
                         	<form id="form_search" name="pass_search" method="get" action="/schedules">
 	                            <div class="form-group">
-	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" placeholder="Ida">
-	                                <input type="hidden" name="start_destination_id" id="start_destination_id" value="">
+	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" value="${startDestination.cityName}" placeholder="Ida">
+	                                <input type="hidden" name="start_destination_id" id="start_destination_id" value="${startDestination.id}">
                                 </div>	                                
 	                            <div class="form-group">
-	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" placeholder="Volta">
-	                                <input type="hidden" name="end_destination_id" id="end_destination_id" value="">
+	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" value="${endDestination.cityName}" placeholder="Volta">
+	                                <input type="hidden" name="end_destination_id" id="end_destination_id" value="${endDestination.id}">
                                 </div>                                
                 	            <div class="form-group">
-	                                <input type="text" class="form-control" name="start_date" id="start_date" placeholder="Data de Partida">
+	                                <input type="text" class="form-control" name="start_date" id="start_date" value="${startDateParam}" placeholder="Data de Partida">
                                 </div>
                                 <div>
                                 	<input class="btn btn-primary" type="submit" value="Buscar">
@@ -194,7 +194,7 @@ label.error {
 					number: true
 				},
 				start_date: {
-					required: true,
+					//required: true,
 					date: true
 				}
 			},
@@ -206,7 +206,7 @@ label.error {
 					required: "Informe o seu destino."
 				},
 				start_date: {
-					required: "Informe a data de partida.",
+					//required: "Informe a data de partida.",
 					date: "Data inválida."
 				}
 			}

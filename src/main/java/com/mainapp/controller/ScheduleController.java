@@ -1,11 +1,9 @@
 package com.mainapp.controller;
 
 import java.io.IOException;
-import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,14 +15,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.apache.catalina.connector.Request;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -65,14 +60,15 @@ public class ScheduleController {
 	public String main(
 			@RequestParam(value = "start_destination_id", required = true) int startDestinationId,
 			@RequestParam(value = "end_destination_id", required = true) int endDestinationId,
-			@RequestParam(value = "start_date", required = true) String startDateParam, 
+			@RequestParam(value = "start_date", required = false) String startDateParam, 
 			Model model) {	
 		
         Locale BRAZIL = new Locale("pt","BR"); 
 		Client c = ClientBuilder.newClient();
 		
 		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/";
-		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId + "/date/" + Extras.brDateToUs(startDateParam); 
+		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId + "/" + Extras.brDateToUs(startDateParam); 
+		System.out.println("%%%%%%%%%%%%%%%%%%%: " + paramsUrl);
 		List<Schedule> schedules = c.target(urlSchedule + paramsUrl).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
 		
 		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/";
@@ -118,6 +114,7 @@ public class ScheduleController {
 		model.addAttribute("agrupedSchedules", agrupedSchedules);
 		model.addAttribute("startDestination", startDestination);
 		model.addAttribute("endDestination", endDestination);
+		model.addAttribute("startDate", startDateParam);
 		
 		return "teste.index";
 	}
