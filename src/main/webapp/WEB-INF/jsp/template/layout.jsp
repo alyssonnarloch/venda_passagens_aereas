@@ -52,7 +52,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Passagens Aéreas</a>
+                <a class="navbar-brand" href="/home">Passagens Aéreas</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -83,11 +83,11 @@
                         <li class="sidebar-search">
                         	<form id="form_search" name="pass_search" method="get" action="/schedules">
 	                            <div class="form-group">
-	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" value="${startDestination.cityName}" placeholder="Ida">
+	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" value="${startDestination.cityName}" placeholder="Partida">
 	                                <input type="hidden" name="start_destination_id" id="start_destination_id" value="${startDestination.id}">
                                 </div>	                                
 	                            <div class="form-group">
-	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" value="${endDestination.cityName}" placeholder="Volta">
+	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" value="${endDestination.cityName}" placeholder="Destino">
 	                                <input type="hidden" name="end_destination_id" id="end_destination_id" value="${endDestination.id}">
                                 </div>                                
                 	            <div class="form-group">
@@ -100,9 +100,9 @@
                             <!-- /input-group -->
                         </li>
                         
-                        <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                        </li>                        
+<!--                         <li> -->
+<!--                             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a> -->
+<!--                         </li>                         -->
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

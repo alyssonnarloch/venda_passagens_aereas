@@ -68,7 +68,7 @@ public class ScheduleController {
 		
 		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/";
 		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId + "/" + Extras.brDateToUs(startDateParam); 
-		System.out.println("%%%%%%%%%%%%%%%%%%%: " + paramsUrl);
+		//System.out.println("%%%%%%%%%%%%%%%%%%%: " + paramsUrl);
 		List<Schedule> schedules = c.target(urlSchedule + paramsUrl).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
 		
 		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/";
@@ -116,7 +116,7 @@ public class ScheduleController {
 		model.addAttribute("endDestination", endDestination);
 		model.addAttribute("startDate", startDateParam);
 		
-		return "teste.index";
+		return "schedule.index";
 	}
 
 	@RequestMapping(value = "/loadcities", method = RequestMethod.GET)
@@ -143,8 +143,20 @@ public class ScheduleController {
 		return acCities;
 	}
 	
-
-
+	@RequestMapping(value = "/destinations", method = RequestMethod.GET)
+	public String showDestinations(Model model) {
+		
+		String url = "http://localhost:3000/servico_empresa_aerea/webresources/city/alldestinations";
+		
+		Client c = ClientBuilder.newClient();
+		
+		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});
+		
+		model.addAttribute("cities", cities);
+		
+		return "schedule.destinations";
+	}
+	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public String handleBadRequests(HttpServletResponse response) throws IOException {
 	    return "home.index";
