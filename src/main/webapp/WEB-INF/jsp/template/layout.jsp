@@ -83,11 +83,11 @@
                         <li class="sidebar-search">
                         	<form id="form_search" name="pass_search" method="get" action="/schedules">
 	                            <div class="form-group">
-	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" value="${startDestination.cityName}" placeholder="Partida">
+	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" value="${startDestination.cityName}" placeholder="Local de Partida">
 	                                <input type="hidden" name="start_destination_id" id="start_destination_id" value="${startDestination.id}">
                                 </div>	                                
 	                            <div class="form-group">
-	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" value="${endDestination.cityName}" placeholder="Destino">
+	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" value="${endDestination.cityName}" placeholder="Local de Destino">
 	                                <input type="hidden" name="end_destination_id" id="end_destination_id" value="${endDestination.id}">
                                 </div>                                
                 	            <div class="form-group">
