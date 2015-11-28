@@ -3,7 +3,7 @@ package com.mainapp.model;
 import java.text.NumberFormat;
 import java.util.Date;
 
-public class Schedule {
+public class Schedule extends Hateoas {
 
 	private int id;
 	private Date startAt;

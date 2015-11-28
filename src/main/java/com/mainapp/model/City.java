@@ -1,6 +1,6 @@
 package com.mainapp.model;
 
-public class City {
+public class City extends Hateoas{
 
 	private int id;
 	private String cityName;
