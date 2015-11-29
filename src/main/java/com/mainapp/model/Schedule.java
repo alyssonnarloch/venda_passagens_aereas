@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class Schedule {
+public class Schedule extends Hateoas {
 
 	private int id;
 	private Date startAt;
@@ -15,7 +15,6 @@ public class Schedule {
 	private int availableSeats;
 	private City startDestination;
 	private City endDestination;
-    private List<Link> links;
 	
 	public Schedule() {
 	}
@@ -88,12 +87,5 @@ public class Schedule {
 	public void setEndDestination(City endDestination) {
 		this.endDestination = endDestination;
     }
-    
-    public List<Link> getLinks() {
-        return links;
-    }
 
-    public void setLinks(List<Link> links) {
-        this.links = links;
-    }
 }

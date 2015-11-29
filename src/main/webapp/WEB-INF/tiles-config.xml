@@ -23,6 +23,11 @@
 			value="/WEB-INF/jsp/schedule/destinations.jsp" />
 	</definition>
 
+	<definition name="purchase.confirmation" extends="template">
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/purchase/confirmation.jsp" />
+	</definition>
+
 	<definition name="home.index" extends="template">
 		<put-attribute name="body"
 			value="/WEB-INF/jsp/home/index.jsp" />
