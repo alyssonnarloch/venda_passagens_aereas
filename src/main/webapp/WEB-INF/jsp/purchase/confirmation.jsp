@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-lg-4">
-	    <form role="form">
+	    <form role="form" method="POST" action="/purchase/make">
 	        <div class="panel panel-info">
 	            <div class="panel-heading">
 	                Confirmação de compra
@@ -16,6 +16,12 @@
 	                <b>Valor:</b> ${schedule.priceVerbose} <br /><br />
 
 					<b>Dados bancários</b>
+					
+					<c:if test="${not empty errorMessage}">
+						<div class="alert alert-danger">
+	                        ${errorMessage}
+	                    </div>
+                    </c:if>
 					<hr />
 
 	            	<input type="hidden" id="schedule_id" name="schedule_id" value="${schedule.id}" />
@@ -25,7 +31,7 @@
 					</div>					
 					<div class="form-group col-md-4">
 					    <label>Conta</label>
-					    <input class="form-control" type="text" id="agency" name="agency" />				    
+					    <input class="form-control" type="text" id="account" name="account" />				    
 					</div>
 	            </div>
 	            
