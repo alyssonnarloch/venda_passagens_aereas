@@ -7,7 +7,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mainapp.model.Account;
+import com.mainapp.model.Purchase;
 import com.mainapp.model.Schedule;
 import com.mainapp.model.SingleMessage;
+import com.mainapp.model.User;
 
 @Controller
 public class PurchaseController {
@@ -50,29 +54,60 @@ public class PurchaseController {
 		Client c = ClientBuilder.newClient();
 		
 		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
-		String urlBalanceUpdate = "localhost:3000/servico_banco/webresources/account/balanceupdate/";
+		String urlBalanceUpdate = "http://localhost:3000/servico_banco/webresources/account/balanceupdate";
 		
 		Schedule schedule = c.target(urlSchedule).request(MediaType.APPLICATION_JSON).get(Schedule.class);
 
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(urlBalanceUpdate).path("resource");
+		WebTarget target = client.target(urlBalanceUpdate);
 		
 		Form form = new Form();
 		form.param("account", String.valueOf(account));
 		form.param("agency", String.valueOf(agency));
 		form.param("price", String.valueOf(schedule.getPrice()));
+		form.param("operation", String.valueOf(Account.DEBT));
 		
 		SingleMessage message = target.request(MediaType.APPLICATION_JSON).put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
-		System.out.println("IRAAAAAAAAAAAAAAAAAAAAAAAAA: " + message.getMessage());
+		
 		if(message.getCode() == Account.OK) {
-			return "";
+			User user = new User();
+			user.setId(1);
+			user.setName("Alysson Narloch");
+			user.setPassword("123456");
+			
+			Purchase clientPurchase = new Purchase();
+			clientPurchase.setClient(user);
+			clientPurchase.setAccount(account);
+			clientPurchase.setAgency(agency);
+			clientPurchase.setStartAt(schedule.getStartAt());
+			clientPurchase.setEndAt(schedule.getEndAt());
+			clientPurchase.setPrice(schedule.getPrice());
+			clientPurchase.setStatus(Purchase.EFFECTED);
+			
+			Session session = sessionFactory.openSession();
+			Transaction t = session.beginTransaction();
+
+			try {
+				session.save(clientPurchase);				
+				t.commit();
+
+				session.flush();
+				session.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				t.rollback();
+			}
+			
+			return "redirect:success";
 		} else if(message.getCode() == Account.INVALID_DATA) {
 			errorMessage = "Dados bancários inválidos.";
 		} else {
 			errorMessage = "Saldo insuficiente.";
 		}
 		
-		model.addAttribute(errorMessage);
+		model.addAttribute("errorMessage", errorMessage);
+		model.addAttribute("schedule", schedule);
+		model.addAttribute("schedule_id", schedule.getId());
 		
 		return "purchase.confirmation";
 	}

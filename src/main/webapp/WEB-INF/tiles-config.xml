@@ -27,6 +27,11 @@
 		<put-attribute name="body"
 			value="/WEB-INF/jsp/purchase/confirmation.jsp" />
 	</definition>
+	
+	<definition name="purchase.success" extends="template">
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/purchase/success.jsp" />
+	</definition>
 
 	<definition name="home.index" extends="template">
 		<put-attribute name="body"
