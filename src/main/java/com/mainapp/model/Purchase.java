@@ -1,6 +1,7 @@
 package com.mainapp.model;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -42,6 +43,15 @@ public class Purchase implements Serializable {
 	private int account;
 	
 	private int agency;
+	
+	@Column(name = "create_at")
+	private Date createAt;
+	
+	@Column(name = "start_destination_name")
+	private String startDestinationName;
+
+	@Column(name = "end_destination_name")
+	private String endDestinationName;
 	
 	public static int EFFECTED = 1;
 	public static int CANCELED = 2;
@@ -110,6 +120,14 @@ public class Purchase implements Serializable {
 		return status;
 	}
 
+	public String getStatusVerbose() {
+		if(this.getStatus() == Purchase.EFFECTED) {
+			return "Efetuado";
+		} else {
+			return "Cancelado";
+		}
+	}
+	
 	public void setStatus(int status) {
 		this.status = status;
 	}
@@ -128,5 +146,34 @@ public class Purchase implements Serializable {
 
 	public void setAgency(int agency) {
 		this.agency = agency;
+	}
+
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
+	public String getStartDestinationName() {
+		return startDestinationName;
+	}
+
+	public void setStartDestinationName(String startDestinationName) {
+		this.startDestinationName = startDestinationName;
+	}
+
+	public String getEndDestinationName() {
+		return endDestinationName;
+	}
+
+	public void setEndDestinationName(String endDestinationName) {
+		this.endDestinationName = endDestinationName;
+	}
+	
+	public String getPriceVerbose() {
+		NumberFormat moneyFormat = NumberFormat.getCurrencyInstance();
+		return " " + moneyFormat.format(this.price);
 	}
 }

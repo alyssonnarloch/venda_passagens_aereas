@@ -1,5 +1,8 @@
 package com.mainapp.controller;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -7,6 +10,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -79,10 +83,15 @@ public class PurchaseController {
 			clientPurchase.setClient(user);
 			clientPurchase.setAccount(account);
 			clientPurchase.setAgency(agency);
+			clientPurchase.setStartDestinationId(schedule.getStartDestination().getId());
+			clientPurchase.setEndDestinationId(schedule.getEndDestination().getId());
 			clientPurchase.setStartAt(schedule.getStartAt());
 			clientPurchase.setEndAt(schedule.getEndAt());
 			clientPurchase.setPrice(schedule.getPrice());
 			clientPurchase.setStatus(Purchase.EFFECTED);
+			clientPurchase.setCreateAt(new Date());
+			clientPurchase.setStartDestinationName(schedule.getStartDestination().getCityName() + " (" + schedule.getStartDestination().getAirportName() + ")");
+			clientPurchase.setEndDestinationName(schedule.getEndDestination().getCityName() + " (" + schedule.getEndDestination().getAirportName() + ")");
 			
 			Session session = sessionFactory.openSession();
 			Transaction t = session.beginTransaction();
@@ -98,7 +107,7 @@ public class PurchaseController {
 				t.rollback();
 			}
 			
-			return "redirect:success";
+			return "redirect:/mypurchases";
 		} else if(message.getCode() == Account.INVALID_DATA) {
 			errorMessage = "Dados bancários inválidos.";
 		} else {
@@ -110,5 +119,31 @@ public class PurchaseController {
 		model.addAttribute("schedule_id", schedule.getId());
 		
 		return "purchase.confirmation";
+	}
+	
+	@RequestMapping(value = "/mypurchases", method = RequestMethod.GET)
+	public String myPurchases(Model model) {
+		
+		Session session = sessionFactory.openSession();
+		Transaction t = session.beginTransaction();
+		
+		try {
+			String sql = "FROM Purchase WHERE client_id = :clientId";
+			
+			Query query = session.createQuery(sql);
+			query.setInteger("clientId", 1);
+			
+			List<Purchase> purchases = query.list();
+		
+			model.addAttribute("purchases", purchases);
+			
+			session.flush();
+			session.close();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			t.rollback();
+		}
+
+		return "purchase.my";
 	}
 }
