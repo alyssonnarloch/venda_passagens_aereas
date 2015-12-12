@@ -26,6 +26,7 @@
                   	                	<b>Partida:</b> ${purchase.startDestinationName} as <b><fmt:formatDate pattern="H:m" value="${purchase.startAt}" /></b> <br />
                   	                	<b>Destino:</b> ${purchase.endDestinationName} as <b><fmt:formatDate pattern="H:m" value="${purchase.endAt}" /></b> <br />
 						                <b>Valor:</b> ${purchase.priceVerbose} <br /><br />
+						                <a class="btn btn-danger" href="/purchase/cancel?id=${purchase.id}">Cancelar compra</a>
 	                                </div>
 	                            </div>
 	                        </div>
