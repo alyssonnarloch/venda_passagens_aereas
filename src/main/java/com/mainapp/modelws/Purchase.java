@@ -1,5 +1,6 @@
 package com.mainapp.modelws;
 
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -56,10 +57,22 @@ public class Purchase {
         this.price = price;
     }
 
+	public String getPriceVerbose() {
+		NumberFormat moneyFormat = NumberFormat.getCurrencyInstance();
+		return " " + moneyFormat.format(this.price);
+	}
+    
     public int getStatus() {
         return status;
     }
 
+    public String getStatusVerbose() {
+    	if(this.status == Purchase.EFFECTED) {
+    		return "Compra efetuada";
+    	}
+    	return "Compra cancelada";
+    }
+    
     public void setStatus(int status) {
         this.status = status;
     }
@@ -80,4 +93,11 @@ public class Purchase {
         this.links = links;
     }
 
+    public int getEffectedPurchase() {
+    	return Purchase.EFFECTED;
+    }
+    
+    public int getCanceledPurchase() {
+    	return Purchase.CANCELED;
+    }
 }

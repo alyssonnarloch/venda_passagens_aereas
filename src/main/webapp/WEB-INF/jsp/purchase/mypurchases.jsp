@@ -5,28 +5,39 @@
 
 <div class="row">
     <div class="col-lg-4">
-			<div class="panel panel-success">
+			<div class="panel panel-info">
                 <div class="panel-heading">
                     Minhas compras
                 </div>
                 <div class="panel-body">
                     <div class="panel-group" id="accordion">
 
-						<c:forEach items="${purchases}" var="purchase">                    
-	                        <div class="panel panel-default">
+						<c:forEach items="${purchases}" var="purchase">
+               				<c:choose>
+								<c:when test="${purchase.status == purchase.effectedPurchase}">
+									<div class="panel panel-success">	
+								</c:when>
+								<c:when test="${purchase.status == purchase.canceledPurchase}">
+									<div class="panel panel-danger">
+								</c:when>
+							</c:choose>
 	                            <div class="panel-heading">
 	                                <h4 class="panel-title">
 	                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse${purchase.id}" aria-expanded="false" class="collapsed">
-	                                    	<fmt:formatDate pattern="dd/MM/yyyy H:m:s" value="${purchase.createAt}" /> - ${purchase.statusVerbose}
+	                                    	<fmt:formatDate pattern="dd/MM/yyyy H:m:s" value="${purchase.createdAt}" /> - ${purchase.statusVerbose}
                                     	</a>
 	                                </h4>
 	                            </div>
 	                            <div id="collapse${purchase.id}" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
 	                                <div class="panel-body">
-                  	                	<b>Partida:</b> ${purchase.startDestinationName} as <b><fmt:formatDate pattern="H:m" value="${purchase.startAt}" /></b> <br />
-                  	                	<b>Destino:</b> ${purchase.endDestinationName} as <b><fmt:formatDate pattern="H:m" value="${purchase.endAt}" /></b> <br />
+                  	                	<b>Partida:</b> ${purchase.schedule.startDestination.cityName} (${purchase.schedule.startDestination.airportName}) as <b><fmt:formatDate pattern="HH:mm" value="${purchase.schedule.startAt}" /></b> <br />
+                  	                	<b>Destino:</b> ${purchase.schedule.endDestination.cityName} (${purchase.schedule.endDestination.airportName}) as <b><fmt:formatDate pattern="HH:mm" value="${purchase.schedule.endAt}" /></b> <br />
 						                <b>Valor:</b> ${purchase.priceVerbose} <br /><br />
-						                <a class="btn btn-danger" href="/purchase/cancel?id=${purchase.id}">Cancelar compra</a>
+										
+										<c:if test="${purchase.status == purchase.effectedPurchase}">						                
+						                	<a class="btn btn-danger" href="/purchase/cancel?id=${purchase.id}">Cancelar compra</a>
+						                </c:if>
+						                
 	                                </div>
 	                            </div>
 	                        </div>

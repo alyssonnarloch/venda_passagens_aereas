@@ -8,6 +8,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Query;
@@ -27,6 +28,7 @@ import com.mainapp.model.Schedule;
 import com.mainapp.model.SingleMessage;
 import com.mainapp.model.User;
 import com.mainapp.modelws.Purchase;
+import com.mainapp.util.Extras;
 
 @Controller
 public class PurchaseController {
@@ -128,35 +130,28 @@ public class PurchaseController {
 	@RequestMapping(value = "/mypurchases", method = RequestMethod.GET)
 	public String myPurchases(Model model) {
 		
-		Session session = sessionFactory.openSession();
-		Transaction t = session.beginTransaction();
-		
-		try {
-			String sql = "FROM Purchase WHERE client_id = :clientId";
-			
-			Query query = session.createQuery(sql);
-			query.setInteger("clientId", 1);
-			
-			List<PurchaseLC> purchases = query.list();
-		
-			model.addAttribute("purchases", purchases);
-			
-			session.flush();
-			session.close();
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			t.rollback();
-		}
+		Client c = ClientBuilder.newClient();
+		String url = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/client/1";
+		List<Purchase> purchases = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Purchase>>() {});
 
+		model.addAttribute("purchases", purchases);
+		
 		return "purchase.my";
 	}
 	
 	@RequestMapping(value = "/purchase/cancel", method = RequestMethod.GET)
-	public String cancel(@RequestParam(value = "schedule_id", required = true) int scheduleId,
+	public String cancel(@RequestParam(value = "id", required = true) int id,
 								Model model) {
 		
+		String url = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/cancel/" + id;
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target(url);
 		
+		Form form = new Form();
+		form.param("id", String.valueOf(id));
 		
-		return "";
+		Purchase purchase = target.request(MediaType.APPLICATION_JSON).put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
+		
+		return "redirect:/mypurchases";
 	}	
 }
