@@ -24,7 +24,7 @@
 	                            <div class="panel-heading">
 	                                <h4 class="panel-title">
 	                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse${purchase.id}" aria-expanded="false" class="collapsed">
-	                                    	<fmt:formatDate pattern="dd/MM/yyyy H:m:s" value="${purchase.createdAt}" /> - ${purchase.statusVerbose}
+	                                    	<fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss" value="${purchase.createdAt}" /> - ${purchase.statusVerbose}
                                     	</a>
 	                                </h4>
 	                            </div>

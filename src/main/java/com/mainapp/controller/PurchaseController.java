@@ -146,7 +146,7 @@ public class PurchaseController {
 	public String cancel(@RequestParam(value = "id", required = true) int id,
 								Model model) {
 		
-		String urlCancelPurchase = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/cancel/";
+		String urlCancelPurchase = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/cancel";
 		Client clientCancelPurchase = ClientBuilder.newClient();
 		WebTarget targetCancelPurchase = clientCancelPurchase.target(urlCancelPurchase);
 		
@@ -155,14 +155,17 @@ public class PurchaseController {
 		
 		Purchase purchase = targetCancelPurchase.request(MediaType.APPLICATION_JSON).put(Entity.entity(formCancelPurchase, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
 		
-		String urlCreditAccount = "http://localhost:3000/servico_banco/webresources/account/balanceupdate/";
+		String urlCreditAccount = "http://localhost:3000/servico_banco/webresources/account/balanceupdate";
 		Client clientCreditAccount = ClientBuilder.newClient();
 		WebTarget targetCreditAccount = clientCancelPurchase.target(urlCreditAccount);
 		
 		Form formBalanceUpdate = new Form();
-		formBalanceUpdate.param("id", String.valueOf(id));
+		formBalanceUpdate.param("account", String.valueOf(purchase.getAccount()));
+		formBalanceUpdate.param("agency", String.valueOf(purchase.getAgency()));
+		formBalanceUpdate.param("price", String.valueOf(purchase.getSchedule().getPrice()));
+		formBalanceUpdate.param("operation", String.valueOf(2));
 		
-		SingleMessage messageBalanceUpdate = targetCancelPurchase.request(MediaType.APPLICATION_JSON).put(Entity.entity(formBalanceUpdate, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
+		SingleMessage messageBalanceUpdate = targetCreditAccount.request(MediaType.APPLICATION_JSON).put(Entity.entity(formBalanceUpdate, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
 		
 		return "redirect:/mypurchases";
 	}	

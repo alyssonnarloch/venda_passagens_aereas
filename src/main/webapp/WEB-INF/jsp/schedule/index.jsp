@@ -22,8 +22,8 @@
 		        	<c:forEach items="${scheduleByDate.value}" var="schedule">		        
 			        	<tbody>
 			        		<tr>
-			        			<td><fmt:formatDate pattern="H:m" value="${schedule.startAt}" /></td>
-			        			<td><fmt:formatDate pattern="H:m" value="${schedule.endAt}" /></td>
+			        			<td><fmt:formatDate pattern="HH:mm" value="${schedule.startAt}" /></td>
+			        			<td><fmt:formatDate pattern="HH:mm" value="${schedule.endAt}" /></td>
 			        			<td>${schedule.priceVerbose}</td>
 			        			<td><a href="/purchase/confirmation?schedule_id=${schedule.id}" class="btn btn-success btn-sm" type="button" style="color: white;">Comprar <span class="glyphicon glyphicon-shopping-cart"></span></a></td>
 			        		</tr>

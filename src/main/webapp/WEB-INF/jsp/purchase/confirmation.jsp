@@ -27,11 +27,11 @@
 	            	<input type="hidden" id="schedule_id" name="schedule_id" value="${schedule.id}" />
 					<div class="form-group col-md-4">
 					    <label>Agência</label>
-					    <input class="form-control" type="text" id="agency" name="agency" />				    
+					    <input class="form-control" type="text" id="agency" name="agency" maxlength="6" />				    
 					</div>					
 					<div class="form-group col-md-4">
 					    <label>Conta</label>
-					    <input class="form-control" type="text" id="account" name="account" />				    
+					    <input class="form-control" type="text" id="account" name="account" maxlength="6" />				    
 					</div>
 	            </div>
 	            
@@ -44,3 +44,10 @@
 		</form>
    	</div>
 </div>
+<script type="text/javascript">
+	$(function() {
+		$("#agency, #account").keyup(function () { 
+		    this.value = this.value.replace(/[^0-9\.]/g,'');
+		});
+	});
+</script>

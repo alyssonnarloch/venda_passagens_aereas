@@ -23,6 +23,7 @@
 
     <!-- Jquery-UI -->
     <link href="/public/jquery-ui/jquery-ui.min.css" rel="stylesheet">    
+    <link href="/public/jquery/jquery-1.11.3.min.css" rel="stylesheet">    
 
     <!-- MetisMenu CSS -->
     <link href="/public/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
@@ -38,6 +39,30 @@
 
     <!-- Custom Fonts -->
     <link href="/public/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="/public/bower_components/jquery/dist/jquery.min.js"></script>
+    
+    <!-- Datepicker -->
+    <script src="/public/datepicker/js/bootstrap-datepicker.js"></script>
+    
+    <!-- Jquery UI -->
+    <script src="/public/jquery-ui/jquery-ui.min.js"></script>
+    
+    <!-- Jquery Validation -->
+    <script src="/public/jquery-validation/dist/jquery.validate.min.js"></script>    
+    <script src="/public/jquery-validation/dist/additional-methods.min.js"></script>    
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/public/bower_components/metisMenu/dist/metisMenu.min.js"></script>    
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/public/dist/js/sb-admin-2.js"></script>
 
 </head>
 <body>	
@@ -115,31 +140,7 @@
         </div>
         <!-- /#page-wrapper -->
 
-    </div>
-    
-    <!-- /#wrapper -->
-
-    <!-- jQuery -->
-    <script src="/public/bower_components/jquery/dist/jquery.min.js"></script>
-    
-    <!-- Datepicker -->
-    <script src="/public/datepicker/js/bootstrap-datepicker.js"></script>
-    
-    <!-- Jquery UI -->
-    <script src="/public/jquery-ui/jquery-ui.min.js"></script>
-    
-    <!-- Jquery Validation -->
-    <script src="/public/jquery-validation/dist/jquery.validate.min.js"></script>    
-    <script src="/public/jquery-validation/dist/additional-methods.min.js"></script>    
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="/public/bower_components/metisMenu/dist/metisMenu.min.js"></script>    
-
-    <!-- Custom Theme JavaScript -->
-    <script src="/public/dist/js/sb-admin-2.js"></script>
+    </div>    
 </body>
 
 <style>
