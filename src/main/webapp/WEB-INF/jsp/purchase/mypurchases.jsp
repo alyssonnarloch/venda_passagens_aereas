@@ -4,7 +4,7 @@
 <fmt:setLocale value="pt-BR" scope="session" />
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-8">
 			<div class="panel panel-info">
                 <div class="panel-heading">
                     Minhas compras

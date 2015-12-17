@@ -4,7 +4,7 @@
 <fmt:setLocale value="pt-BR" scope="session" />
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-6">
 	    <form role="form" method="POST" action="/purchase/make">
 	        <div class="panel panel-info">
 	            <div class="panel-heading">
