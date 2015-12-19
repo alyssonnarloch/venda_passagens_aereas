@@ -1,8 +1,8 @@
 package com.mainapp.controller;
 
-import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -11,7 +11,6 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -26,9 +25,7 @@ import com.mainapp.model.Account;
 import com.mainapp.model.PurchaseLC;
 import com.mainapp.model.Schedule;
 import com.mainapp.model.SingleMessage;
-import com.mainapp.model.User;
 import com.mainapp.modelws.Purchase;
-import com.mainapp.util.Extras;
 
 @Controller
 public class PurchaseController {
@@ -38,16 +35,19 @@ public class PurchaseController {
 	
 	@RequestMapping(value = "/purchase/confirmation", method = RequestMethod.GET)
 	public String confirmation(@RequestParam(value = "schedule_id", required = true) int scheduleId,
-								Model model) {
+								Model model, HttpSession session) {
+		
 		Client c = ClientBuilder.newClient();
-		
 		String url = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
-		
 		Schedule schedule = c.target(url).request(MediaType.APPLICATION_JSON).get(Schedule.class);
 				
 		model.addAttribute("schedule", schedule);
 		
-		return "purchase.confirmation";
+		if(session.getAttribute("user") != null) { 
+			return "purchase.confirmation";
+		} else {
+			return "authentication.login";
+		}
 	}
 	
 	@RequestMapping(value = "/purchase/make", method = RequestMethod.POST)
@@ -64,7 +64,6 @@ public class PurchaseController {
 		
 		Client clientAccountVerification = ClientBuilder.newClient();
 		String urlBalanceVerification = "http://localhost:3000/servico_banco/webresources/account/balanceverification/account/" + account + "/agency/" + agency + "/price/" + schedule.getPrice();
-		System.out.println(urlBalanceVerification);
 		SingleMessage messageVerification = clientAccountVerification.target(urlBalanceVerification).request(MediaType.APPLICATION_JSON).get(SingleMessage.class);
 
 		if(messageVerification.getCode() == Account.OK) {

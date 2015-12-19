@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "clients")
-public class User implements Serializable{
+public class UserLC implements Serializable{
 
     @Id
     @GeneratedValue
@@ -17,7 +17,7 @@ public class User implements Serializable{
 	private String name;
 	private String password;
 	
-	public User() {
+	public UserLC() {
 		
 	}
 	

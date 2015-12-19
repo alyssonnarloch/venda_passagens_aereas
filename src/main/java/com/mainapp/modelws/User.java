@@ -1,12 +1,13 @@
 package com.mainapp.modelws;
 
-public class Client {
+public class User {
 
     private int id;
     private String name;
+    private String email;
     private String password;
 
-    public Client() {
+    public User() {
     }
 
     public int getId() {
@@ -25,7 +26,15 @@ public class Client {
         this.name = name;
     }
 
-    public String getPassword() {
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
         return password;
     }
 

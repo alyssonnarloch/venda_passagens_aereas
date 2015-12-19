@@ -11,7 +11,7 @@ public class Purchase {
 
     private int id;
     private Schedule schedule;
-    private Client client;
+    private User client;
     private double price;
     private int status;
     private Date createdAt;
@@ -43,11 +43,11 @@ public class Purchase {
         this.schedule = schedule;
     }
 
-    public Client getClient() {
+    public User getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(User client) {
         this.client = client;
     }
 
