@@ -10,7 +10,7 @@
                <h3 class="panel-title">Para efetuar sua compra acesse sua conta</h3>
            </div>
            <div class="panel-body">
-               <form role="form">
+               <form role="form" method="POST" action="/authentication">
                    <fieldset>
                        <div class="form-group">
                            <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
@@ -19,7 +19,9 @@
                            <input class="form-control" placeholder="Senha" name="password" type="password" value="">
                        </div>
                        <!-- Change this to a button or input when using this as a form -->
-                       <a href="/authentication" class="btn btn-lg btn-success btn-block">Login</a>
+                       <div class="form-group">
+                       		<input type="submit" class="btn btn-lg btn-success btn-block" value="Login">
+                       </div>
                    </fieldset>
                </form>
            </div>
