@@ -38,8 +38,6 @@ public class AuthenticationController {
 								Model model,
 								HttpSession session) {
 		
-		String errorMessage = "";
-		
 		String urlAuthentication = "http://localhost:3000/servico_empresa_aerea/webresources/authentication/verification";
 		Client clientAuthentication = ClientBuilder.newClient();
 		WebTarget targetAuthentication = clientAuthentication.target(urlAuthentication);
@@ -56,12 +54,12 @@ public class AuthenticationController {
 		
 		if(user.getId() != 0) {
 			session.setAttribute("user", user);
+			model.addAttribute("errorMessage", "");
 			model.addAttribute("schedule", schedule);			
 			return "purchase.confirmation";
 		} else {
-			errorMessage = "Email ou senha inválidos.";
 			model.addAttribute("schedule", schedule);
-			session.setAttribute("errorMessage", errorMessage);
+			model.addAttribute("errorMessage", "Email ou senha inválidos.");
 			return "authentication.login";
 		}
 		

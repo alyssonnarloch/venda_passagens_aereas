@@ -68,22 +68,16 @@ public class ScheduleController {
 		
 		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/";
 		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId + "/" + Extras.brDateToUs(startDateParam); 
-		//System.out.println("%%%%%%%%%%%%%%%%%%%: " + paramsUrl);
 		List<Schedule> schedules = c.target(urlSchedule + paramsUrl).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
 		
 		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/";
 		City startDestination = c.target(urlCity + startDestinationId).request(MediaType.APPLICATION_JSON).get(City.class);
 		City endDestination = c.target(urlCity + endDestinationId).request(MediaType.APPLICATION_JSON).get(City.class);
 		
-        //Response r = c.target("http://localhost:3000/flightservice/webresources/destination/1").request(MediaType.APPLICATION_JSON).get();
-        //URI selfUri = r.getLink("self").getUri();
-        //System.out.println("Link: " + selfUri.toString());
-		
 		Map<String, List<Schedule>> agrupedSchedules = new HashMap<String, List<Schedule>>();
 		
 		List<String> scheduleDates = new ArrayList<String>();
 		
-		//DateFormat df = new SimpleDateFormat("dd/MM/yyyy");		
 		DateFormat df = new SimpleDateFormat();		
 		df = DateFormat.getDateInstance(DateFormat.FULL, BRAZIL);  
 		
@@ -147,9 +141,7 @@ public class ScheduleController {
 	public String showDestinations(Model model) {
 		
 		String url = "http://localhost:3000/servico_empresa_aerea/webresources/city/alldestinations";
-		
 		Client c = ClientBuilder.newClient();
-		
 		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});
 		
 		model.addAttribute("cities", cities);

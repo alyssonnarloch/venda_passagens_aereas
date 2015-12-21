@@ -26,6 +26,7 @@ import com.mainapp.model.PurchaseLC;
 import com.mainapp.model.Schedule;
 import com.mainapp.model.SingleMessage;
 import com.mainapp.modelws.Purchase;
+import com.mainapp.modelws.User;
 
 @Controller
 public class PurchaseController {
@@ -54,9 +55,12 @@ public class PurchaseController {
 	public String makePurchase(@RequestParam(value = "schedule_id") int scheduleId,
 								@RequestParam(value = "agency") int agency,
 								@RequestParam(value = "account") int account,
+								HttpSession session,
 								Model model) {
 		
 		String errorMessage = "";
+		
+		User user = (User) session.getAttribute("user");
 		
 		Client clientSchedule = ClientBuilder.newClient();
 		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
@@ -87,7 +91,7 @@ public class PurchaseController {
 				
 				Form purchaseParams = new Form();
 				purchaseParams.param("schedule_id", String.valueOf(scheduleId));
-				purchaseParams.param("client_id", String.valueOf(1));
+				purchaseParams.param("client_id", String.valueOf(user.getId()));
 				purchaseParams.param("account", String.valueOf(account));
 				purchaseParams.param("agency", String.valueOf(agency));
 				
@@ -95,20 +99,20 @@ public class PurchaseController {
 				
 				//Criando a compra no banco local
 				PurchaseLC purchaseLC = new PurchaseLC();
-				purchaseLC.setClientId(1);
+				purchaseLC.setClientId(user.getId());
 				purchaseLC.setScheduleId(scheduleId);
 				purchaseLC.setPrice(schedule.getPrice());
 				purchaseLC.setCreateAt(purchaseWS.getCreatedAt());
 				
-				Session session = sessionFactory.openSession();
-				Transaction t = session.beginTransaction();
+				Session sessionDb = sessionFactory.openSession();
+				Transaction t = sessionDb.beginTransaction();
 	
 				try {
-					session.save(purchaseLC);				
+					sessionDb.save(purchaseLC);				
 					t.commit();
 	
-					session.flush();
-					session.close();
+					sessionDb.flush();
+					sessionDb.close();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 					t.rollback();
@@ -130,10 +134,12 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping(value = "/mypurchases", method = RequestMethod.GET)
-	public String myPurchases(Model model) {
+	public String myPurchases(Model model, HttpSession session) {
+		
+		User user = (User) session.getAttribute("user");
 		
 		Client c = ClientBuilder.newClient();
-		String url = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/client/1";
+		String url = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/client/" + user.getId();
 		List<Purchase> purchases = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Purchase>>() {});
 
 		model.addAttribute("purchases", purchases);
