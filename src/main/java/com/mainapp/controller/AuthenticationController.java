@@ -9,10 +9,12 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mainapp.model.Schedule;
 import com.mainapp.modelws.User;
 
 @Controller
@@ -23,28 +25,46 @@ public class AuthenticationController {
 		return "authentication.login";
 	}
 	
+	@RequestMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/home";
+	}
+	
 	@RequestMapping(value = "/authentication", method = RequestMethod.POST)
-	public String authentication(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session) {
+	public String authentication(@RequestParam(value = "email", required = true) String email, 
+								@RequestParam(value = "password", required = true) String password, 
+								@RequestParam(value = "schedule_id", required = false) int scheduleId, 
+								Model model,
+								HttpSession session) {
 		
 		String errorMessage = "";
 		
-		String url = "http://localhost:3000/servico_empresa_aerea/webresources/authentication/verification";
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(url);
+		String urlAuthentication = "http://localhost:3000/servico_empresa_aerea/webresources/authentication/verification";
+		Client clientAuthentication = ClientBuilder.newClient();
+		WebTarget targetAuthentication = clientAuthentication.target(urlAuthentication);
 		
 		Form form = new Form();
 		form.param("email", email);
 		form.param("password", password);
+		
+		User user = targetAuthentication.request(MediaType.APPLICATION_JSON).post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), User.class);
 
-		User user = (User) target.request(MediaType.APPLICATION_JSON).post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), User.class);
+		Client clientSchedule = ClientBuilder.newClient();
+		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
+		Schedule schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).get(Schedule.class);
 		
 		if(user.getId() != 0) {
-			errorMessage = "Email ou senha inválidos.";
-		} else {
 			session.setAttribute("user", user);
+			model.addAttribute("schedule", schedule);			
+			return "purchase.confirmation";
+		} else {
+			errorMessage = "Email ou senha inválidos.";
+			model.addAttribute("schedule", schedule);
+			session.setAttribute("errorMessage", errorMessage);
+			return "authentication.login";
 		}
 		
-		return "purchase.confirmation";
 	}
 	
 }
