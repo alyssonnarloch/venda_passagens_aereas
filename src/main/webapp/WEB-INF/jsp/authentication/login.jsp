@@ -11,7 +11,14 @@
            </div>
            <div class="panel-body">
                <form role="form" method="POST" action="/authentication">
-               		<input type="hidden" name="schedule_id" value="${schedule.id}">
+               
+               		<c:if test="${not empty schedule}">
+               			<input type="hidden" name="schedule_id" value="${schedule.id}">
+               		</c:if>
+               		<c:if test="${empty schedule}">
+               			<input type="hidden" name="schedule_id" value="0">
+               		</c:if>
+               
                     <fieldset>
 	                    <div class="form-group">
 	                        <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
