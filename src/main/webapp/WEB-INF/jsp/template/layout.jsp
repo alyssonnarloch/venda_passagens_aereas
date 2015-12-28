@@ -23,7 +23,6 @@
 
     <!-- Jquery-UI -->
     <link href="/public/jquery-ui/jquery-ui.min.css" rel="stylesheet">    
-    <link href="/public/jquery/jquery-1.11.3.min.css" rel="stylesheet">    
 
     <!-- MetisMenu CSS -->
     <link href="/public/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
@@ -87,9 +86,7 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        <li><a href="/mypurchases"><i class="fa fa-shopping-cart fa-fw"></i>Minhas compras</a>
                         </li>
                         <li class="divider"></li>
                         <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>

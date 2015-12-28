@@ -30,8 +30,8 @@
 	                            </div>
 	                            <div id="collapse${purchase.id}" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
 	                                <div class="panel-body">
-                  	                	<b>Partida:</b> ${purchase.schedule.startDestination.cityName} (${purchase.schedule.startDestination.airportName}) as <b><fmt:formatDate pattern="HH:mm" value="${purchase.schedule.startAt}" /></b> <br />
-                  	                	<b>Destino:</b> ${purchase.schedule.endDestination.cityName} (${purchase.schedule.endDestination.airportName}) as <b><fmt:formatDate pattern="HH:mm" value="${purchase.schedule.endAt}" /></b> <br />
+                  	                	<b>Partida:</b> ${purchase.schedule.startDestination.cityName} (${purchase.schedule.startDestination.airportName}) dia <b><fmt:formatDate pattern="dd/MM/yyyy" value="${purchase.schedule.startAt}" /></b> as <b><fmt:formatDate pattern="HH:mm" value="${purchase.schedule.startAt}" /></b> <br />
+                  	                	<b>Destino:</b> ${purchase.schedule.endDestination.cityName} (${purchase.schedule.endDestination.airportName}) dia <b><fmt:formatDate pattern="dd/MM/yyyy" value="${purchase.schedule.endAt}" /></b> as <b><fmt:formatDate pattern="HH:mm" value="${purchase.schedule.endAt}" /></b> <br />
 						                <b>Valor:</b> ${purchase.priceVerbose} <br /><br />
 										
 										<c:if test="${purchase.status == purchase.effectedPurchase}">						                

@@ -48,24 +48,23 @@ public class AuthenticationController {
 		
 		User user = targetAuthentication.request(MediaType.APPLICATION_JSON).post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), User.class);
 
-		Schedule schedule = null;
+		if(scheduleId > 0) {
+			Client clientSchedule = ClientBuilder.newClient();
+			String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
+			Schedule schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).get(Schedule.class);
+			model.addAttribute("schedule", schedule);
+		}
 		
 		if(user.getId() != 0) {
 			session.setAttribute("user", user);
 			model.addAttribute("errorMessage", "");
-			model.addAttribute("schedule", schedule);
 			
 			if(scheduleId > 0) {
-				Client clientSchedule = ClientBuilder.newClient();
-				String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
-				schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).get(Schedule.class);
-
 				return "purchase.confirmation";
 			} else {
 				return "redirect:/mypurchases";
 			}
 		} else {
-			model.addAttribute("schedule", schedule);
 			model.addAttribute("errorMessage", "Email ou senha inválidos.");
 			return "authentication.login";
 		}
