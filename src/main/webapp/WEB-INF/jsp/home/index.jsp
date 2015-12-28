@@ -42,7 +42,7 @@
 		                    </div>
 		                </div>
 		            </div>
-		            <a href="#">
+		            <a href="/mypurchases">
 		                <div class="panel-footer">
 		                    <span class="pull-left">Visualizar</span>
 		                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

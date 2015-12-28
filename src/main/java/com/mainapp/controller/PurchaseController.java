@@ -138,13 +138,17 @@ public class PurchaseController {
 		
 		User user = (User) session.getAttribute("user");
 		
-		Client c = ClientBuilder.newClient();
-		String url = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/client/" + user.getId();
-		List<Purchase> purchases = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Purchase>>() {});
-
-		model.addAttribute("purchases", purchases);
-		
-		return "purchase.my";
+		if(user != null) {
+			Client c = ClientBuilder.newClient();
+			String url = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/client/" + user.getId();
+			List<Purchase> purchases = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Purchase>>() {});
+	
+			model.addAttribute("purchases", purchases);
+			
+			return "purchase.my";
+		} else {
+			return "authentication.login";
+		}
 	}
 	
 	@RequestMapping(value = "/purchase/cancel", method = RequestMethod.GET)
