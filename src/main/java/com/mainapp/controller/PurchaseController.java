@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mainapp.configuration.Definition;
 import com.mainapp.model.Account;
 import com.mainapp.model.PurchaseLC;
 import com.mainapp.model.Schedule;
@@ -39,7 +40,7 @@ public class PurchaseController {
 								Model model, HttpSession session) {
 		
 		Client c = ClientBuilder.newClient();
-		String url = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
+		String url = Definition.FLIGHT_COMPANY_URI + "schedule/" + scheduleId;
 		Schedule schedule = c.target(url).request(MediaType.APPLICATION_JSON).get(Schedule.class);
 				
 		model.addAttribute("schedule", schedule);
@@ -63,15 +64,15 @@ public class PurchaseController {
 		User user = (User) session.getAttribute("user");
 		
 		Client clientSchedule = ClientBuilder.newClient();
-		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
+		String urlSchedule = Definition.FLIGHT_COMPANY_URI + "schedule/" + scheduleId;
 		Schedule schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).get(Schedule.class);
 		
 		Client clientAccountVerification = ClientBuilder.newClient();
-		String urlBalanceVerification = "http://localhost:3000/servico_banco/webresources/account/balanceverification/account/" + account + "/agency/" + agency + "/price/" + schedule.getPrice();
+		String urlBalanceVerification = Definition.BANK_URI + "account/balanceverification/account/" + account + "/agency/" + agency + "/price/" + schedule.getPrice();
 		SingleMessage messageVerification = clientAccountVerification.target(urlBalanceVerification).request(MediaType.APPLICATION_JSON).get(SingleMessage.class);
 
 		if(messageVerification.getCode() == Account.OK) {
-			String urlBalanceUpdate = "http://localhost:3000/servico_banco/webresources/account/balanceupdate";
+			String urlBalanceUpdate = Definition.BANK_URI + "account/balanceupdate";
 			Client clientAccountUpdate = ClientBuilder.newClient();
 			WebTarget targetAccountUpdate = clientAccountUpdate.target(urlBalanceUpdate);
 			
@@ -85,7 +86,7 @@ public class PurchaseController {
 			
 			if(messageUpdate.getCode() == Account.OK) {
 				//Criando a compra no WS
-				String urlMakePurchase = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/save";		
+				String urlMakePurchase = Definition.FLIGHT_COMPANY_URI + "purchase/save";		
 				Client clientPurchase = ClientBuilder.newClient();
 				WebTarget targetPurchase = clientPurchase.target(urlMakePurchase);
 				
@@ -140,7 +141,7 @@ public class PurchaseController {
 		
 		if(user != null) {
 			Client c = ClientBuilder.newClient();
-			String url = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/client/" + user.getId();
+			String url = Definition.FLIGHT_COMPANY_URI + "purchase/client/" + user.getId();
 			List<Purchase> purchases = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Purchase>>() {});
 	
 			model.addAttribute("purchases", purchases);
@@ -155,7 +156,7 @@ public class PurchaseController {
 	public String cancel(@RequestParam(value = "id", required = true) int id,
 								Model model) {
 		
-		String urlCancelPurchase = "http://localhost:3000/servico_empresa_aerea/webresources/purchase/cancel";
+		String urlCancelPurchase = Definition.FLIGHT_COMPANY_URI + "purchase/cancel";
 		Client clientCancelPurchase = ClientBuilder.newClient();
 		WebTarget targetCancelPurchase = clientCancelPurchase.target(urlCancelPurchase);
 		
@@ -164,7 +165,7 @@ public class PurchaseController {
 		
 		Purchase purchase = targetCancelPurchase.request(MediaType.APPLICATION_JSON).put(Entity.entity(formCancelPurchase, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
 		
-		String urlCreditAccount = "http://localhost:3000/servico_banco/webresources/account/balanceupdate";
+		String urlCreditAccount = Definition.BANK_URI + "account/balanceupdate";
 		Client clientCreditAccount = ClientBuilder.newClient();
 		WebTarget targetCreditAccount = clientCancelPurchase.target(urlCreditAccount);
 		

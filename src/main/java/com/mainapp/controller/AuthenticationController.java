@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mainapp.configuration.Definition;
 import com.mainapp.model.Schedule;
 import com.mainapp.modelws.User;
 
@@ -38,7 +39,7 @@ public class AuthenticationController {
 								Model model,
 								HttpSession session) {
 		
-		String urlAuthentication = "http://localhost:3000/servico_empresa_aerea/webresources/authentication/verification";
+		String urlAuthentication = Definition.FLIGHT_COMPANY_URI + "authentication/verification";
 		Client clientAuthentication = ClientBuilder.newClient();
 		WebTarget targetAuthentication = clientAuthentication.target(urlAuthentication);
 		
@@ -50,7 +51,7 @@ public class AuthenticationController {
 
 		if(scheduleId > 0) {
 			Client clientSchedule = ClientBuilder.newClient();
-			String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/" + scheduleId;
+			String urlSchedule = Definition.FLIGHT_COMPANY_URI + "schedule/" + scheduleId;
 			Schedule schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).get(Schedule.class);
 			model.addAttribute("schedule", schedule);
 		}
@@ -68,7 +69,6 @@ public class AuthenticationController {
 			model.addAttribute("errorMessage", "Email ou senha inválidos.");
 			return "authentication.login";
 		}
-		
 	}
 	
 }

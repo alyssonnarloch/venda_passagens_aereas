@@ -16,9 +16,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mainapp.configuration.Definition;
 import com.mainapp.model.Autocomplete;
 import com.mainapp.model.City;
 import com.mainapp.model.Schedule;
@@ -39,38 +38,20 @@ public class ScheduleController {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	@RequestMapping("/dbtest")
-	public void dbtest() {
-		Session session = sessionFactory.openSession();
-		Transaction t = session.beginTransaction();
-		
-		City d = new City();
-		d.setCityName("Papanduva");
-		d.setAirportName("Unknow Airport");
-		
-		session.save(d);
-		
-		t.commit();
-		
-		session.flush();
-		session.close();
-	}
-	
 	@RequestMapping(value = "/schedules", method = RequestMethod.GET)
-	public String main(
-			@RequestParam(value = "start_destination_id", required = true) int startDestinationId,
-			@RequestParam(value = "end_destination_id", required = true) int endDestinationId,
-			@RequestParam(value = "start_date", required = false) String startDateParam, 
-			Model model) {	
+	public String index(@RequestParam(value = "start_destination_id", required = true) int startDestinationId,
+					@RequestParam(value = "end_destination_id", required = true) int endDestinationId,
+					@RequestParam(value = "start_date", required = false) String startDateParam, 
+					Model model) {	
 		
         Locale BRAZIL = new Locale("pt","BR"); 
 		Client c = ClientBuilder.newClient();
 		
-		String urlSchedule = "http://localhost:3000/servico_empresa_aerea/webresources/schedule/";
+		String urlSchedule = Definition.FLIGHT_COMPANY_URI + "schedule/";
 		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId + "/" + Extras.brDateToUs(startDateParam); 
 		List<Schedule> schedules = c.target(urlSchedule + paramsUrl).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
 		
-		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/";
+		String urlCity = Definition.FLIGHT_COMPANY_URI + "city/";
 		City startDestination = c.target(urlCity + startDestinationId).request(MediaType.APPLICATION_JSON).get(City.class);
 		City endDestination = c.target(urlCity + endDestinationId).request(MediaType.APPLICATION_JSON).get(City.class);
 		
@@ -117,7 +98,7 @@ public class ScheduleController {
 	@ResponseBody
 	public List<Autocomplete> loadCities(@RequestParam("term") String term) {				
 		
-		String urlCity = "http://localhost:3000/servico_empresa_aerea/webresources/city/search/" + term.trim();
+		String urlCity = Definition.FLIGHT_COMPANY_URI + "city/search/" + term.trim();
 		
 		Client c = ClientBuilder.newClient();
 		
@@ -140,7 +121,7 @@ public class ScheduleController {
 	@RequestMapping(value = "/destinations", method = RequestMethod.GET)
 	public String showDestinations(Model model) {
 		
-		String url = "http://localhost:3000/servico_empresa_aerea/webresources/city/alldestinations";
+		String url = Definition.FLIGHT_COMPANY_URI + "city/alldestinations";
 		Client c = ClientBuilder.newClient();
 		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});
 		

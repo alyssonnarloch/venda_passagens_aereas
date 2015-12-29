@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mainapp.configuration.Definition;
 import com.mainapp.model.City;
 
 @Controller
@@ -19,7 +20,7 @@ public class HomeController {
 	@RequestMapping("/home")
 	public String index(Model model) {
 
-		String url = "http://localhost:3000/servico_empresa_aerea/webresources/city/alldestinations";
+		String url = Definition.FLIGHT_COMPANY_URI + "city/alldestinations";
 		Client c = ClientBuilder.newClient();
 		
 		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});

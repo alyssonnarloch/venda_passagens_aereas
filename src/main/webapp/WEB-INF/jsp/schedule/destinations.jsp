@@ -12,7 +12,6 @@
 		        <c:forEach items="${cities}" var="city">
 	                <a href="#" class="list-group-item">
 	                	${city.cityName} (${city.airportName})
-<!-- 	                    <i class="fa fa-comment fa-fw"></i>	                     -->
 	                    </span>
 	                </a>
 	    	    </c:forEach>
