@@ -5,7 +5,6 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Home</h1>
 		  <div class="row">
    		    <div class="col-lg-3 col-md-6">
 		        <div class="panel panel-green">
@@ -37,7 +36,7 @@
 		                        <i class="fa fa-shopping-cart fa-5x"></i>
 		                    </div>
 		                    <div class="col-xs-9 text-right">
-		                        <div class="huge">124</div>
+		                        <div class="huge">&nbsp;</div>
 		                        <div>Minhas compras</div>
 		                    </div>
 		                </div>

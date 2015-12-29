@@ -20,7 +20,6 @@ public class HomeController {
 	public String index(Model model) {
 
 		String url = "http://localhost:3000/servico_empresa_aerea/webresources/city/alldestinations";
-		
 		Client c = ClientBuilder.newClient();
 		
 		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});

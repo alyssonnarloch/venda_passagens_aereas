@@ -68,7 +68,6 @@ public class PurchaseController {
 		
 		Client clientAccountVerification = ClientBuilder.newClient();
 		String urlBalanceVerification = "http://localhost:3000/servico_banco/webresources/account/balanceverification/account/" + account + "/agency/" + agency + "/price/" + schedule.getPrice();
-		System.out.println(urlBalanceVerification);
 		SingleMessage messageVerification = clientAccountVerification.target(urlBalanceVerification).request(MediaType.APPLICATION_JSON).get(SingleMessage.class);
 
 		if(messageVerification.getCode() == Account.OK) {

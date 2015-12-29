@@ -15,59 +15,28 @@
 
     <title>EE$2015 - Passagens Aéreas</title>
 
-    <!-- Bootstrap Core CSS -->
     <link href="/public/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Datepicker -->
     <link href="/public/datepicker/css/datepicker.css" rel="stylesheet">
-
-    <!-- Jquery-UI -->
     <link href="/public/jquery-ui/jquery-ui.min.css" rel="stylesheet">    
-
-    <!-- MetisMenu CSS -->
     <link href="/public/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Timeline CSS -->
     <link href="/public/dist/css/timeline.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link href="/public/dist/css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Morris Charts CSS -->
     <link href="/public/bower_components/morrisjs/morris.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
     <link href="/public/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- /#wrapper -->
-
-    <!-- jQuery -->
+    
     <script src="/public/bower_components/jquery/dist/jquery.min.js"></script>
-    
-    <!-- Datepicker -->
     <script src="/public/datepicker/js/bootstrap-datepicker.js"></script>
-    
-    <!-- Jquery UI -->
     <script src="/public/jquery-ui/jquery-ui.min.js"></script>
-    
-    <!-- Jquery Validation -->
     <script src="/public/jquery-validation/dist/jquery.validate.min.js"></script>    
     <script src="/public/jquery-validation/dist/additional-methods.min.js"></script>    
-
-    <!-- Bootstrap Core JavaScript -->
     <script src="/public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
     <script src="/public/bower_components/metisMenu/dist/metisMenu.min.js"></script>    
-
-    <!-- Custom Theme JavaScript -->
     <script src="/public/dist/js/sb-admin-2.js"></script>
 
 </head>
 <body>	
     <div id="wrapper">
 
-        <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -78,9 +47,18 @@
                 </button>
                 <a class="navbar-brand" href="/home">Passagens Aéreas</a>
             </div>
-            <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">                                
+                <li class="dropdown">
+                	<c:choose>
+                		<c:when test="${not empty user.name}">
+		                	<span><b>${user.name}</b></span>
+                		</c:when>
+                		<c:otherwise>
+                			<span>Você não está conectado. Clique<a href="/login">aqui</a>para efetuar seu login.</span>
+                		</c:otherwise>
+                	</c:choose>
+                </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -92,11 +70,8 @@
                         <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
-                    <!-- /.dropdown-user -->
                 </li>
-                <!-- /.dropdown -->
             </ul>
-            <!-- /.navbar-top-links -->
 
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
@@ -105,38 +80,43 @@
                         <li class="sidebar-search">
                         	<form id="form_search" name="pass_search" method="get" action="/schedules">
 	                            <div class="form-group">
-	                                <input type="text" class="form-control" name="start_destination_name" id="start_destination_name" value="${startDestination.cityName}" placeholder="Local de Partida">
+	                                <c:choose>
+	                            		<c:when test="${not empty startDestination}">
+	                                		<input type="text" class="form-control" name="start_destination_name" id="start_destination_name" value="${startDestination.cityName} (${startDestination.airportName})" placeholder="Local de Partida">
+	                                	</c:when>
+	                                	<c:otherwise>
+	                                		<input type="text" class="form-control" name="start_destination_name" id="start_destination_name" value="" placeholder="Local de Partida">
+	                                	</c:otherwise>
+	                                </c:choose>
 	                                <input type="hidden" name="start_destination_id" id="start_destination_id" value="${startDestination.id}">
                                 </div>	                                
 	                            <div class="form-group">
-	                                <input type="text" class="form-control" name="end_destination_name" id="end_destination_name" value="${endDestination.cityName}" placeholder="Local de Destino">
+	                            	<c:choose>
+	                            		<c:when test="${not empty endDestination}">
+	                                		<input type="text" class="form-control" name="end_destination_name" id="end_destination_name" value="${endDestination.cityName} (${endDestination.airportName})" placeholder="Local de Destino">
+	                                	</c:when>
+	                                	<c:otherwise>
+	                                		<input type="text" class="form-control" name="end_destination_name" id="end_destination_name" value="" placeholder="Local de Destino">
+	                                	</c:otherwise>
+	                                </c:choose>
 	                                <input type="hidden" name="end_destination_id" id="end_destination_id" value="${endDestination.id}">
                                 </div>                                
                 	            <div class="form-group">
-	                                <input type="text" class="form-control" name="start_date" id="start_date" value="${startDateParam}" placeholder="Data de Partida">
+	                                <input type="text" class="form-control" name="start_date" id="start_date" value="${startDate}" placeholder="Data de Partida">
                                 </div>
                                 <div>
                                 	<input class="btn btn-primary" type="submit" value="Buscar">
                                 </div>
                             </form>
-                            <!-- /input-group -->
                         </li>
-                        
-<!--                         <li> -->
-<!--                             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a> -->
-<!--                         </li>                         -->
                     </ul>
                 </div>
-                <!-- /.sidebar-collapse -->
             </div>
-            <!-- /.navbar-static-side -->
         </nav>
 
         <div id="page-wrapper">            
             <tiles:insertAttribute name="body" /> 
         </div>
-        <!-- /#page-wrapper -->
-
     </div>    
 </body>
 
