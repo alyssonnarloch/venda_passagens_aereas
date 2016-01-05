@@ -49,11 +49,11 @@ public class ScheduleController {
 		
 		String urlSchedule = Definition.FLIGHT_COMPANY_URI + "schedule/";
 		String paramsUrl = "start/" + startDestinationId + "/end/" + endDestinationId + "/" + Extras.brDateToUs(startDateParam); 
-		List<Schedule> schedules = c.target(urlSchedule + paramsUrl).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Schedule>>() {});
+		List<Schedule> schedules = c.target(urlSchedule + paramsUrl).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(new GenericType<List<Schedule>>() {});
 		
 		String urlCity = Definition.FLIGHT_COMPANY_URI + "city/";
-		City startDestination = c.target(urlCity + startDestinationId).request(MediaType.APPLICATION_JSON).get(City.class);
-		City endDestination = c.target(urlCity + endDestinationId).request(MediaType.APPLICATION_JSON).get(City.class);
+		City startDestination = c.target(urlCity + startDestinationId).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(City.class);
+		City endDestination = c.target(urlCity + endDestinationId).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(City.class);
 		
 		Map<String, List<Schedule>> agrupedSchedules = new HashMap<String, List<Schedule>>();
 		
@@ -102,7 +102,7 @@ public class ScheduleController {
 		
 		Client c = ClientBuilder.newClient();
 		
-		List<City> cities = c.target(urlCity).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});
+		List<City> cities = c.target(urlCity).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(new GenericType<List<City>>() {});
 		List<Autocomplete> acCities = new ArrayList<Autocomplete>();
 		
 		for(City city: cities) {
@@ -123,7 +123,7 @@ public class ScheduleController {
 		
 		String url = Definition.FLIGHT_COMPANY_URI + "city/alldestinations";
 		Client c = ClientBuilder.newClient();
-		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});
+		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(new GenericType<List<City>>() {});
 		
 		model.addAttribute("cities", cities);
 		

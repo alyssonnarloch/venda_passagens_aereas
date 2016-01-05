@@ -47,7 +47,7 @@ public class AuthenticationController {
 		form.param("email", email);
 		form.param("password", password);
 		
-		User user = targetAuthentication.request(MediaType.APPLICATION_JSON).post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), User.class);
+		User user = targetAuthentication.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), User.class);
 
 		if(scheduleId > 0) {
 			Client clientSchedule = ClientBuilder.newClient();

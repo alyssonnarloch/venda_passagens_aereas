@@ -41,7 +41,7 @@ public class PurchaseController {
 		
 		Client c = ClientBuilder.newClient();
 		String url = Definition.FLIGHT_COMPANY_URI + "schedule/" + scheduleId;
-		Schedule schedule = c.target(url).request(MediaType.APPLICATION_JSON).get(Schedule.class);
+		Schedule schedule = c.target(url).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(Schedule.class);
 				
 		model.addAttribute("schedule", schedule);
 		
@@ -65,11 +65,11 @@ public class PurchaseController {
 		
 		Client clientSchedule = ClientBuilder.newClient();
 		String urlSchedule = Definition.FLIGHT_COMPANY_URI + "schedule/" + scheduleId;
-		Schedule schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).get(Schedule.class);
+		Schedule schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(Schedule.class);
 		
 		Client clientAccountVerification = ClientBuilder.newClient();
 		String urlBalanceVerification = Definition.BANK_URI + "account/balanceverification/account/" + account + "/agency/" + agency + "/price/" + schedule.getPrice();
-		SingleMessage messageVerification = clientAccountVerification.target(urlBalanceVerification).request(MediaType.APPLICATION_JSON).get(SingleMessage.class);
+		SingleMessage messageVerification = clientAccountVerification.target(urlBalanceVerification).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_BANK).get(SingleMessage.class);
 
 		if(messageVerification.getCode() == Account.OK) {
 			String urlBalanceUpdate = Definition.BANK_URI + "account/balanceupdate";
@@ -82,7 +82,7 @@ public class PurchaseController {
 			form.param("price", String.valueOf(schedule.getPrice()));
 			form.param("operation", String.valueOf(Account.DEBT));
 			
-			SingleMessage messageUpdate = targetAccountUpdate.request(MediaType.APPLICATION_JSON).put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
+			SingleMessage messageUpdate = targetAccountUpdate.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_BANK).put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
 			
 			if(messageUpdate.getCode() == Account.OK) {
 				//Criando a compra no WS
@@ -96,7 +96,7 @@ public class PurchaseController {
 				purchaseParams.param("account", String.valueOf(account));
 				purchaseParams.param("agency", String.valueOf(agency));
 				
-				Purchase purchaseWS = targetPurchase.request(MediaType.APPLICATION_JSON).post(Entity.entity(purchaseParams, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
+				Purchase purchaseWS = targetPurchase.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).post(Entity.entity(purchaseParams, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
 				
 				//Criando a compra no banco local
 				PurchaseLC purchaseLC = new PurchaseLC();
@@ -142,7 +142,7 @@ public class PurchaseController {
 		if(user != null) {
 			Client c = ClientBuilder.newClient();
 			String url = Definition.FLIGHT_COMPANY_URI + "purchase/client/" + user.getId();
-			List<Purchase> purchases = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<Purchase>>() {});
+			List<Purchase> purchases = c.target(url).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(new GenericType<List<Purchase>>() {});
 	
 			model.addAttribute("purchases", purchases);
 			
@@ -163,7 +163,7 @@ public class PurchaseController {
 		Form formCancelPurchase = new Form();
 		formCancelPurchase.param("id", String.valueOf(id));
 		
-		Purchase purchase = targetCancelPurchase.request(MediaType.APPLICATION_JSON).put(Entity.entity(formCancelPurchase, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
+		Purchase purchase = targetCancelPurchase.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).put(Entity.entity(formCancelPurchase, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
 		
 		String urlCreditAccount = Definition.BANK_URI + "account/balanceupdate";
 		Client clientCreditAccount = ClientBuilder.newClient();
@@ -175,7 +175,7 @@ public class PurchaseController {
 		formBalanceUpdate.param("price", String.valueOf(purchase.getSchedule().getPrice()));
 		formBalanceUpdate.param("operation", String.valueOf(2));
 		
-		SingleMessage messageBalanceUpdate = targetCreditAccount.request(MediaType.APPLICATION_JSON).put(Entity.entity(formBalanceUpdate, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
+		SingleMessage messageBalanceUpdate = targetCreditAccount.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_BANK).put(Entity.entity(formBalanceUpdate, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
 		
 		return "redirect:/mypurchases";
 	}	

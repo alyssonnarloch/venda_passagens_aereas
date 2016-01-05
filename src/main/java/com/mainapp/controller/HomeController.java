@@ -23,7 +23,7 @@ public class HomeController {
 		String url = Definition.FLIGHT_COMPANY_URI + "city/alldestinations";
 		Client c = ClientBuilder.newClient();
 		
-		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).get(new GenericType<List<City>>() {});
+		List<City> cities = c.target(url).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(new GenericType<List<City>>() {});
 		
 		model.addAttribute("numDestinations", cities.size());
 		
