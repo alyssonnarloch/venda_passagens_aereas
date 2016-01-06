@@ -71,60 +71,64 @@ public class PurchaseController {
 		String urlBalanceVerification = Definition.BANK_URI + "account/balanceverification/account/" + account + "/agency/" + agency + "/price/" + schedule.getPrice();
 		SingleMessage messageVerification = clientAccountVerification.target(urlBalanceVerification).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_BANK).get(SingleMessage.class);
 
-		if(messageVerification.getCode() == Account.OK) {
-			String urlBalanceUpdate = Definition.BANK_URI + "account/balanceupdate";
-			Client clientAccountUpdate = ClientBuilder.newClient();
-			WebTarget targetAccountUpdate = clientAccountUpdate.target(urlBalanceUpdate);
-			
-			Form form = new Form();
-			form.param("account", String.valueOf(account));
-			form.param("agency", String.valueOf(agency));
-			form.param("price", String.valueOf(schedule.getPrice()));
-			form.param("operation", String.valueOf(Account.DEBT));
-			
-			SingleMessage messageUpdate = targetAccountUpdate.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_BANK).put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
-			
-			if(messageUpdate.getCode() == Account.OK) {
-				//Criando a compra no WS
-				String urlMakePurchase = Definition.FLIGHT_COMPANY_URI + "purchase/save";
-				Client clientPurchase = ClientBuilder.newClient();
-				WebTarget targetPurchase = clientPurchase.target(urlMakePurchase);
+		if(schedule.getAvailableSeats() > 0) {
+			if(messageVerification.getCode() == Account.OK) {
+				String urlBalanceUpdate = Definition.BANK_URI + "account/balanceupdate";
+				Client clientAccountUpdate = ClientBuilder.newClient();
+				WebTarget targetAccountUpdate = clientAccountUpdate.target(urlBalanceUpdate);
 				
-				Form purchaseParams = new Form();
-				purchaseParams.param("schedule_id", String.valueOf(scheduleId));
-				purchaseParams.param("client_id", String.valueOf(user.getId()));
-				purchaseParams.param("account", String.valueOf(account));
-				purchaseParams.param("agency", String.valueOf(agency));
+				Form form = new Form();
+				form.param("account", String.valueOf(account));
+				form.param("agency", String.valueOf(agency));
+				form.param("price", String.valueOf(schedule.getPrice()));
+				form.param("operation", String.valueOf(Account.DEBT));
 				
-				Purchase purchaseWS = targetPurchase.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).post(Entity.entity(purchaseParams, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
+				SingleMessage messageUpdate = targetAccountUpdate.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_BANK).put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), SingleMessage.class);
 				
-				//Criando a compra no banco local
-				PurchaseLC purchaseLC = new PurchaseLC();
-				purchaseLC.setClientId(user.getId());
-				purchaseLC.setScheduleId(scheduleId);
-				purchaseLC.setPrice(schedule.getPrice());
-				purchaseLC.setCreateAt(purchaseWS.getCreatedAt());
-				
-				Session sessionDb = sessionFactory.openSession();
-				Transaction t = sessionDb.beginTransaction();
-	
-				try {
-					sessionDb.save(purchaseLC);				
-					t.commit();
-	
-					sessionDb.flush();
-					sessionDb.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					t.rollback();
+				if(messageUpdate.getCode() == Account.OK) {
+					//Criando a compra no WS
+					String urlMakePurchase = schedule.get("purchase");
+					Client clientPurchase = ClientBuilder.newClient();
+					WebTarget targetPurchase = clientPurchase.target(urlMakePurchase);
+					
+					Form purchaseParams = new Form();
+					purchaseParams.param("schedule_id", String.valueOf(scheduleId));
+					purchaseParams.param("client_id", String.valueOf(user.getId()));
+					purchaseParams.param("account", String.valueOf(account));
+					purchaseParams.param("agency", String.valueOf(agency));
+					
+					Purchase purchaseWS = targetPurchase.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).post(Entity.entity(purchaseParams, MediaType.APPLICATION_FORM_URLENCODED_TYPE), Purchase.class);
+					
+					//Criando a compra no banco local
+					PurchaseLC purchaseLC = new PurchaseLC();
+					purchaseLC.setClientId(user.getId());
+					purchaseLC.setScheduleId(scheduleId);
+					purchaseLC.setPrice(schedule.getPrice());
+					purchaseLC.setCreateAt(purchaseWS.getCreatedAt());
+					
+					Session sessionDb = sessionFactory.openSession();
+					Transaction t = sessionDb.beginTransaction();
+		
+					try {
+						sessionDb.save(purchaseLC);				
+						t.commit();
+		
+						sessionDb.flush();
+						sessionDb.close();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						t.rollback();
+					}
+					
+					return "redirect:/mypurchases";
 				}
-				
-				return "redirect:/mypurchases";
+			} else if(messageVerification.getCode() == Account.INVALID_DATA) {
+				errorMessage = "Dados bancários inválidos.";
+			} else {
+				errorMessage = "Saldo insuficiente.";
 			}
-		} else if(messageVerification.getCode() == Account.INVALID_DATA) {
-			errorMessage = "Dados bancários inválidos.";
 		} else {
-			errorMessage = "Saldo insuficiente.";
+			errorMessage = "Compra indisponível. Não há mais assentos livres no voo desejado.";
 		}
 		
 		model.addAttribute("errorMessage", errorMessage);
@@ -153,8 +157,7 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping(value = "/purchase/cancel", method = RequestMethod.GET)
-	public String cancel(@RequestParam(value = "id", required = true) int id,
-								Model model) {
+	public String cancel(@RequestParam(value = "id", required = true) int id, Model model) {
 		
 		String urlCancelPurchase = Definition.FLIGHT_COMPANY_URI + "purchase/cancel";
 		Client clientCancelPurchase = ClientBuilder.newClient();
@@ -167,7 +170,7 @@ public class PurchaseController {
 		
 		String urlCreditAccount = Definition.BANK_URI + "account/balanceupdate";
 		Client clientCreditAccount = ClientBuilder.newClient();
-		WebTarget targetCreditAccount = clientCancelPurchase.target(urlCreditAccount);
+		WebTarget targetCreditAccount = clientCreditAccount.target(urlCreditAccount);
 		
 		Form formBalanceUpdate = new Form();
 		formBalanceUpdate.param("account", String.valueOf(purchase.getAccount()));

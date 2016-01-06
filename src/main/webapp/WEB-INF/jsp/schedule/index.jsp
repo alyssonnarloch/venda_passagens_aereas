@@ -17,6 +17,7 @@
 				        		<tr>
 				        			<th><span class="label label-primary">${startDestination.cityName} - ${startDestination.airportName} <span class="fa fa-plane"></span></span></th>
 				        			<th><span class="label label-success">${endDestination.cityName} - ${endDestination.airportName} <span class="glyphicon glyphicon-plane"></span></span></th>
+				        			<th><span class="label label-primary">Poltronas disponíveis <span class="fa fa-suitcase"></span></span></span></th>
 				        			<th><span class="label label-default">Preço <span class="fa fa-money"></span></span></th>
 				        			<th><span class="fa fa-gear"></span></th>
 				        		</tr>
@@ -26,8 +27,23 @@
 					        		<tr>
 					        			<td><fmt:formatDate pattern="HH:mm" value="${schedule.startAt}" /></td>
 					        			<td><fmt:formatDate pattern="HH:mm" value="${schedule.endAt}" /></td>
-					        			<td>${schedule.priceVerbose}</td>
-					        			<td><a href="/purchase/confirmation?schedule_id=${schedule.id}" class="btn btn-success btn-sm" type="button" style="color: white;">Comprar <span class="glyphicon glyphicon-shopping-cart"></span></a></td>
+					        			<td>${schedule.availableSeats}</td>
+					        			<c:choose>
+					        				<c:when test="${schedule.availableSeats > 0}">
+					        					<td>${schedule.priceVerbose}</td>
+				        					</c:when>
+							        		<c:otherwise>
+				        						<td>---</td>
+				        					</c:otherwise>
+					        			</c:choose>
+					        			<c:choose>
+					        				<c:when test="${schedule.availableSeats > 0}">
+					        					<td><a href="/purchase/confirmation?schedule_id=${schedule.id}" class="btn btn-success btn-sm" type="button" style="color: white;">Comprar <span class="glyphicon glyphicon-shopping-cart"></span></a></td>
+				        					</c:when>
+				        					<c:otherwise>
+				        						<td><button type="button" class="btn btn-warning disabled">Esgotado</button></td>
+				        					</c:otherwise>
+					        			</c:choose>
 					        		</tr>
 					        	</tbody>
 				        	</c:forEach>
