@@ -86,7 +86,7 @@ public class PurchaseController {
 			
 			if(messageUpdate.getCode() == Account.OK) {
 				//Criando a compra no WS
-				String urlMakePurchase = Definition.FLIGHT_COMPANY_URI + "purchase/save";		
+				String urlMakePurchase = Definition.FLIGHT_COMPANY_URI + "purchase/save";
 				Client clientPurchase = ClientBuilder.newClient();
 				WebTarget targetPurchase = clientPurchase.target(urlMakePurchase);
 				

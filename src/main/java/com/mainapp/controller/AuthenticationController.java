@@ -52,7 +52,7 @@ public class AuthenticationController {
 		if(scheduleId > 0) {
 			Client clientSchedule = ClientBuilder.newClient();
 			String urlSchedule = Definition.FLIGHT_COMPANY_URI + "schedule/" + scheduleId;
-			Schedule schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).get(Schedule.class);
+			Schedule schedule = clientSchedule.target(urlSchedule).request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).get(Schedule.class);
 			model.addAttribute("schedule", schedule);
 		}
 		
