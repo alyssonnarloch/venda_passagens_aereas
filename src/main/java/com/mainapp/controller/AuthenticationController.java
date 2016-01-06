@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.mainapp.configuration.Definition;
 import com.mainapp.model.Schedule;
 import com.mainapp.modelws.User;
+import com.mainapp.util.Extras;
 
 @Controller
 public class AuthenticationController {
@@ -45,7 +46,7 @@ public class AuthenticationController {
 		
 		Form form = new Form();
 		form.param("email", email);
-		form.param("password", password);
+		form.param("password", Extras.getMD5(password));
 		
 		User user = targetAuthentication.request(MediaType.APPLICATION_JSON).header(Definition.AUTH_HEADER, Definition.AUTH_TOKEN_FLIGHT).post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), User.class);
 
